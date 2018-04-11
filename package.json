@@ -1,0 +1,22 @@
+{
+  "name": "mcdiamondfire",
+  "version": "1.0.1",
+  "description": "Get data from the mcdiamondfire server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "xmlhttprequest": "^1.8.0"
+  },
+  "author": "LittleWhole",
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "minecraft",
+    "mc",
+    "df",
+    "diamondfire",
+    "mcdiamondfire"
+  ]
+}
