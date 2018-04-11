@@ -1,6 +1,6 @@
 {
   "name": "mcdiamondfire",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Get data from the mcdiamondfire server",
   "main": "index.js",
   "scripts": {
