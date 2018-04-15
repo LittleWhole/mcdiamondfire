@@ -1,5 +1,5 @@
-const http = require("xmlhttprequest");
-const request = new XMLHttpRequest();
+const { XMLHttpRequest } = require("xmlhttprequest");
+const http = new XMLHttpRequest();
 
 class Connection {
   constructor(key, baseURL = "http://verify.mcdiamondfire.com:5000/api/") {
