@@ -1,13 +1,12 @@
-const http = require("xmlhttprequest");
-const request = new XMLHttpRequest();
+const { get } = require("snekfetch");
 
 class Connection {
   constructor(key, baseURL = "http://verify.mcdiamondfire.com:5000/api/") {
     /**
-     * The header used for authentication
+     * The key used for authentication
      * @type {String}
      */
-    Object.defineProperty(this, "_header", { value: { access: key } });
+    Object.defineProperty(this, "_key", { value: key });
 
     /**
      * The base URL used for generating requests
@@ -16,12 +15,18 @@ class Connection {
     Object.defineProperty(this, "_baseURL", { value: baseURL });
   }
 
-  request(...components) {
-    http.open("GET", this._baseURL + components.join("/"), false);
-    http.setRequestHeader(this._header);
-    http.send(null);
+  async request(...components) {
+    const { body } = await get(this._baseURL + components.join("/"), {
+      headers: {
+        access: this._key
+      }
+    });
 
-    return http.responseText;
+    if (body.error) return Promise.reject(body.error);
+
+    console.log(body);
+
+    return body;
   }
 
   /**
@@ -29,8 +34,10 @@ class Connection {
    * @type {Array[Object]}
    */
   get activePlots() {
-    const { result } = this.request("plots/active");
-    return result;
+    return new Promise(async r => {
+      const { result } = await this.request("plots/active");
+      r(result);
+    });
   }
 
   /**
@@ -38,8 +45,10 @@ class Connection {
    * @type {Array[String]}
    */
   get nodeList() {
-    const { list } = this.request("nodes/list");
-    return list;
+    return new Promise(async r => {
+      const { list } = await this.request("nodes/list");
+      r(list);
+    });
   }
 
   /**
@@ -63,15 +72,17 @@ class Connection {
    * @type {Array[Object]}
    */
   get supportQueue() {
-    const { list } = this.request("support/queue");
-    return list;
+    return new Promise(async r => {
+      const { users } = await this.request("support/queue");
+      return r(users);
+    });
   }
 
 
   /** 
    * Fetches information about a key
    * @param {key} String The key to fetch
-   * @returns {Object} The fetched key
+   * @returns {Promise<Object>} The fetched key
   */
   key(key) {
     return this.request("key", key);
@@ -80,6 +91,7 @@ class Connection {
   /**
    * Fetches information on a node
    * @param {Node} Number The node to fetch
+   * @returns {Promise<Object>} The fetched node
    */
   node(node = 1) {
     return this.request("nodes", node);
@@ -89,6 +101,7 @@ class Connection {
    * Fetches a staff member's support stats
    * @param {String} staff The staff to fetch stats for
    * @param {String} mode The mode to use (total or month)
+   * @returns {Promise<Object>} The specified staff's stats
    */
   supportStats(staff, mode = "total") {
     if (!["total", "month"].includes(mode)) throw new Error("\"mode\" must be either \"total\" or \"monthly\"");
@@ -99,13 +112,10 @@ class Connection {
   /**
    * Fetches a plot by ID
    * @param {Sting} id The ID to fetch a plot by
-   * @returns {Object} plot The plot's values
+   * @returns {Promise<Object>} plot The plot's values
    */
-  plot(id) {
-    const plot = this.request("plots", id);
-    if (plot.error) return Promise.reject(plot.error);
-
-    return plot;
+  async plot(id) {
+    return this.request("plots", id);
   }
  }
 
