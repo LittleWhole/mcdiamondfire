@@ -1,6 +1,6 @@
 {
   "name": "mcdiamondfire",
-  "version": "1.1.0",
+  "version": "1.2.2",
   "description": "Get data from the mcdiamondfire server",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,7 @@
   },
   "author": "LittleWhole",
   "license": "MIT",
+  "repository": "https://github.com/LittleWhole/mcdiamondfire",
   "keywords": [
     "node",
     "minecraft",
